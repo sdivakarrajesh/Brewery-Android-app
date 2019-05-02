@@ -1,5 +1,6 @@
 package theblueorb.dev.com.dependencyinjectionwithdagger2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
         String password = passwordEt.getText().toString();
         if(membersDataManager.isAMember(new Member(username,password))){
             Toast.makeText(MainActivity.this,"Access Granted" ,Toast.LENGTH_SHORT ).show();
+            Intent myIntent = new Intent(MainActivity.this, CoffeeActivity.class);
+            MainActivity.this.startActivity(myIntent);
+
 
         }
         else {
