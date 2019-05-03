@@ -1,12 +1,7 @@
 package theblueorb.dev.com.dependencyinjectionwithdagger2;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +27,26 @@ public class APIClient {
         return retrofit;
     }
 
-    public static void fetchCoffee(final Context context) {
+    public static void fetchCoffee(final Context context, final onItemsFetchedFromNetwork listener) {
 
+        CoffeeAPIService coffeeAPIService = APIClient.getClient().create(CoffeeAPIService.class);
+        Call<List<Coffee>> call = coffeeAPIService.fetchDrinks("espresso");
+        call.enqueue(new Callback<List<Coffee>>() {
+            @Override
+            public void onResponse(Call<List<Coffee>> call, Response<List<Coffee>> response) {
+                if (response.code() == 200) {
+                    drinks = response.body();
+                    listener.onItemsFetched(drinks);
+                } else {
+                    listener.onItemsFetched(null);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<List<Coffee>> call, Throwable t) {
+                Toast.makeText(context, "Network call Failure" + t.fillInStackTrace(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

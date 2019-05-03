@@ -1,6 +1,5 @@
 package theblueorb.dev.com.dependencyinjectionwithdagger2;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -21,11 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class CoffeeActivity extends AppCompatActivity{
+public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedFromNetwork{
 
 
     @BindView(R.id.button)
@@ -43,50 +39,7 @@ public class CoffeeActivity extends AppCompatActivity{
     }
 
     public void fetchAndLoadViews(){
-        CoffeeAPIService coffeeAPIService = APIClient.getClient().create(CoffeeAPIService.class);
-        Call<List<Coffee>> call = coffeeAPIService.fetchDrinks("espresso");
-        call.enqueue(new Callback<List<Coffee>>() {
-            @Override
-            public void onResponse(Call<List<Coffee>> call, Response<List<Coffee>> response) {
-                if (response.code() == 200) {
-                    drinks = response.body();
-                    for (Coffee drink : drinks) {
-                        TextView tv = new TextView(CoffeeActivity.this);
-                        tv.setText(drink.getName());
-                        ll.addView(tv);
-                        ImageView imgView = new ImageView(CoffeeActivity.this);
-                        URL imgURL = null;
-                        try {
-                            imgURL = new URL(APIClient.BASE_URL + drink.getUrl());
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        }
-
-                        RequestOptions myOptions = new RequestOptions()
-                                .fitCenter()
-                                .override(200, 200);
-
-                        Glide.with(CoffeeActivity.this)
-                                .load(imgURL)
-                                .apply(myOptions)
-                                .into(imgView);
-                        ll.addView(imgView);
-                        Log.e(CoffeeActivity.this.toString(), drink.getName() + imgURL);
-
-                    }
-                    Toast.makeText(CoffeeActivity.this, "Successfully fetched details", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(CoffeeActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(Call<List<Coffee>> call, Throwable t) {
-                Toast.makeText(CoffeeActivity.this, "Failure" + t.fillInStackTrace(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        APIClient.fetchCoffee(CoffeeActivity.this,this );
     }
 
 
@@ -95,4 +48,38 @@ public class CoffeeActivity extends AppCompatActivity{
         fetchAndLoadViews();
     }
 
+    @Override
+    public void onItemsFetched(List<Coffee> drinks) {
+        if(drinks!=null){
+            for (Coffee drink : drinks) {
+                TextView tv = new TextView(CoffeeActivity.this);
+                tv.setText(drink.getName());
+                ll.addView(tv);
+                ImageView imgView = new ImageView(CoffeeActivity.this);
+                URL imgURL = null;
+                try {
+                    imgURL = new URL(APIClient.BASE_URL + drink.getUrl());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+                RequestOptions myOptions = new RequestOptions()
+                        .fitCenter()
+                        .override(200, 200);
+
+                Glide.with(CoffeeActivity.this)
+                        .load(imgURL)
+                        .apply(myOptions)
+                        .into(imgView);
+                ll.addView(imgView);
+                Log.e(CoffeeActivity.this.toString(), drink.getName() + imgURL);
+
+            }
+            Toast.makeText(CoffeeActivity.this, "Successfully fetched details", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(CoffeeActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 }
