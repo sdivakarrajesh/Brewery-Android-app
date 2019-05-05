@@ -26,21 +26,27 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0-alpha04'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha04'
 
+    //dagger
     implementation 'com.google.dagger:dagger-android:2.20'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.20'
     implementation 'com.google.android.material:material:1.1.0-alpha05'
 
+    //butterkknife
     implementation 'com.jakewharton:butterknife:9.0.0-rc1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
 
-
+    //retrofit and gson
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     implementation 'com.google.code.gson:gson:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
 
+    //glide
     implementation 'com.github.bumptech.glide:glide:4.8.0'
-    // Glide v4 uses this new annotation processor -- see https://bumptech.github.io/glide/doc/generatedapi.html
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+
+    //room
+    implementation "androidx.room:room-runtime:2.0.0"
+    annotationProcessor "androidx.room:room-compiler:2.0.0"
 
 
 }

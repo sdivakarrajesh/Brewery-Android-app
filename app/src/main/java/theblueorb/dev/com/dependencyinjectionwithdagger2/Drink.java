@@ -1,6 +1,6 @@
 package theblueorb.dev.com.dependencyinjectionwithdagger2;
 
-public class Coffee {
+public class Drink {
     private String name;
     private String url;
 

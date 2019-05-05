@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class APIClient {
     public static final String BASE_URL = "https://starbucks-coffee-api.herokuapp.com/";
     public static Retrofit retrofit = null;
-    static List<Coffee> drinks = new ArrayList<Coffee>();
+    static List<Drink> drinks = new ArrayList<Drink>();
 
     public static Retrofit getClient() {
         if (retrofit == null) {
@@ -30,10 +30,10 @@ public class APIClient {
     public static void fetchCoffee(final Context context, final onItemsFetchedFromNetwork listener) {
 
         CoffeeAPIService coffeeAPIService = APIClient.getClient().create(CoffeeAPIService.class);
-        Call<List<Coffee>> call = coffeeAPIService.fetchDrinks("espresso");
-        call.enqueue(new Callback<List<Coffee>>() {
+        Call<List<Drink>> call = coffeeAPIService.fetchDrinks("espresso");
+        call.enqueue(new Callback<List<Drink>>() {
             @Override
-            public void onResponse(Call<List<Coffee>> call, Response<List<Coffee>> response) {
+            public void onResponse(Call<List<Drink>> call, Response<List<Drink>> response) {
                 if (response.code() == 200) {
                     drinks = response.body();
                     listener.onItemsFetched(drinks);
@@ -43,7 +43,7 @@ public class APIClient {
             }
 
             @Override
-            public void onFailure(Call<List<Coffee>> call, Throwable t) {
+            public void onFailure(Call<List<Drink>> call, Throwable t) {
                 Toast.makeText(context, "Network call Failure" + t.fillInStackTrace(), Toast.LENGTH_SHORT).show();
             }
         });
