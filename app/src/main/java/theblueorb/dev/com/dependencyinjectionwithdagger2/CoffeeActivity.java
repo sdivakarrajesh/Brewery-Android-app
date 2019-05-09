@@ -11,6 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
@@ -19,13 +24,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import theblueorb.dev.com.dependencyinjectionwithdagger2.database.DrinkDatabase;
 import theblueorb.dev.com.dependencyinjectionwithdagger2.database.DrinkEntry;
+import theblueorb.dev.com.dependencyinjectionwithdagger2.drinksRecyclerView.DrinkAdapter;
 
 public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedFromNetwork {
 
@@ -43,16 +47,25 @@ public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedF
     TextView url;
     @BindView(R.id.img)
     ImageView img;
+    @BindView(R.id.drinks_recycler_view)
+    RecyclerView recyclerView;
 
     private DrinkDatabase mDb;
+    private RecyclerView.LayoutManager layoutManager;
+    private DrinkAdapter drinkAdapter;
+
+    private static final String TAG = CoffeeActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee);
         ButterKnife.bind(this);
-
         mDb = DrinkDatabase.getInstance(getApplicationContext());
+
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
     }
 
     public void fetchAndLoadViews() {
@@ -71,7 +84,7 @@ public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedF
                 insertImageToDatabase();
                 break;
             }
-            case R.id.getFromDbButton:{
+            case R.id.getFromDbButton: {
                 loadDataFromFromDb();
             }
 
@@ -100,31 +113,23 @@ public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedF
 
     @Override
     public void onItemsFetched(List<Drink> drinks) {
+
         if (drinks != null) {
+
             for (Drink drink : drinks) {
-                TextView tv = new TextView(CoffeeActivity.this);
-                tv.setText(drink.getName());
-                ll.addView(tv);
-                ImageView imgView = new ImageView(CoffeeActivity.this);
                 URL imgURL = null;
                 try {
                     imgURL = new URL(APIClient.BASE_URL + drink.getUrl());
+                    drink.setUrl(imgURL.toString());
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-
-                RequestOptions myOptions = new RequestOptions()
-                        .fitCenter()
-                        .override(200, 200);
-
-                Glide.with(CoffeeActivity.this)
-                        .load(imgURL)
-                        .apply(myOptions)
-                        .into(imgView);
-                ll.addView(imgView);
-                Log.e(CoffeeActivity.this.toString(), drink.getName() + imgURL);
+                Log.e(TAG, "" + drink.getName() + " " + imgURL);
 
             }
+
+            drinkAdapter = new DrinkAdapter(drinks);
+            recyclerView.setAdapter(drinkAdapter);
             Toast.makeText(CoffeeActivity.this, "Successfully fetched details", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(CoffeeActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
