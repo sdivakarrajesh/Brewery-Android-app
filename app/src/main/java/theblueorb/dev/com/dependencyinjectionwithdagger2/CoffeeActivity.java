@@ -1,9 +1,13 @@
 package theblueorb.dev.com.dependencyinjectionwithdagger2;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -36,8 +40,29 @@ public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedF
     @BindView(R.id.ll)
     LinearLayout ll;
     List<Drink> drinks;
-    @BindView(R.id.insertDummyFavDrinks)
-    Button insertDummyFavDrinksButton;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_items, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.favorites_menu_item: {
+                Intent myIntent = new Intent(CoffeeActivity.this, FavoriteDrinksActivity.class);
+                startActivity(myIntent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @BindView(R.id.drinks_recycler_view)
     RecyclerView recyclerView;
@@ -63,19 +88,13 @@ public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedF
         APIClient.fetchCoffee(CoffeeActivity.this, this);
     }
 
-    @OnClick({R.id.button, R.id.insertDummyFavDrinks})
+    @OnClick({R.id.button})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button: {
                 fetchAndLoadViews();
                 break;
             }
-
-            case R.id.insertDummyFavDrinks: {
-                insertImageToDatabase();
-                break;
-            }
-
         }
     }
 

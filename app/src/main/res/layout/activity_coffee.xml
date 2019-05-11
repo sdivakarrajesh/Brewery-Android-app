@@ -16,15 +16,8 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Fetch drinks from API" />
 
-        <Button
-            android:id="@+id/insertDummyFavDrinks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Insert dummy favorite drinks data to DB" />
-
-        
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:scrollbars="vertical"

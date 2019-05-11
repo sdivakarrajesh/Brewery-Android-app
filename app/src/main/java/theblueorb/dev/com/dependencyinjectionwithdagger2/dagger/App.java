@@ -2,8 +2,6 @@ package theblueorb.dev.com.dependencyinjectionwithdagger2.dagger;
 
 import android.app.Application;
 
-import theblueorb.dev.com.dependencyinjectionwithdagger2.DaggerMembersAppComponent;
-
 public class App extends Application {
     private static App app;
     private MembersAppComponent membersAppComponent;

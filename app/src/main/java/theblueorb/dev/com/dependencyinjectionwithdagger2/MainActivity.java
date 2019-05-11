@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         if(membersDataManager.isAMember(new Member(username,password))){
             Toast.makeText(MainActivity.this,"Access Granted" ,Toast.LENGTH_SHORT ).show();
             Intent myIntent = new Intent(MainActivity.this, CoffeeActivity.class);
-            MainActivity.this.startActivity(myIntent);
+            startActivity(myIntent);
 
 
         }
