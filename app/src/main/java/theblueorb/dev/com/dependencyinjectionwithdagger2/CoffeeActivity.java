@@ -6,18 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -27,11 +22,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import theblueorb.dev.com.dependencyinjectionwithdagger2.database.DrinkDatabase;
-import theblueorb.dev.com.dependencyinjectionwithdagger2.database.DrinkEntry;
+import theblueorb.dev.com.dependencyinjectionwithdagger2.database.FavoriteDrinkEntry;
+import theblueorb.dev.com.dependencyinjectionwithdagger2.database.FavoriteDrinksDatabase;
 import theblueorb.dev.com.dependencyinjectionwithdagger2.drinksRecyclerView.DrinkAdapter;
+import theblueorb.dev.com.dependencyinjectionwithdagger2.models.Drink;
+import theblueorb.dev.com.dependencyinjectionwithdagger2.network.APIClient;
 
-public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedFromNetwork {
+public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedFromNetworkListener {
 
 
     @BindView(R.id.button)
@@ -39,18 +36,13 @@ public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedF
     @BindView(R.id.ll)
     LinearLayout ll;
     List<Drink> drinks;
-    @BindView(R.id.insertImgToDbButton)
-    Button insertImgToDbButton;
-    @BindView(R.id.name)
-    TextView name;
-    @BindView(R.id.url)
-    TextView url;
-    @BindView(R.id.img)
-    ImageView img;
+    @BindView(R.id.insertDummyFavDrinks)
+    Button insertDummyFavDrinksButton;
+
     @BindView(R.id.drinks_recycler_view)
     RecyclerView recyclerView;
 
-    private DrinkDatabase mDb;
+    private FavoriteDrinksDatabase mDb;
     private RecyclerView.LayoutManager layoutManager;
     private DrinkAdapter drinkAdapter;
 
@@ -61,8 +53,7 @@ public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee);
         ButterKnife.bind(this);
-        mDb = DrinkDatabase.getInstance(getApplicationContext());
-
+        mDb = FavoriteDrinksDatabase.getInstance(getApplicationContext());
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
@@ -72,7 +63,7 @@ public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedF
         APIClient.fetchCoffee(CoffeeActivity.this, this);
     }
 
-    @OnClick({R.id.button, R.id.insertImgToDbButton})
+    @OnClick({R.id.button, R.id.insertDummyFavDrinks})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button: {
@@ -80,35 +71,28 @@ public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedF
                 break;
             }
 
-            case R.id.insertImgToDbButton: {
+            case R.id.insertDummyFavDrinks: {
                 insertImageToDatabase();
                 break;
-            }
-            case R.id.getFromDbButton: {
-                loadDataFromFromDb();
             }
 
         }
     }
 
-    private void loadDataFromFromDb() {
-
-        List<DrinkEntry> entries = mDb.drinkDao().loadAllDrinks();
-        name.setText(entries.get(0).getDrinkName());
-        url.setText(entries.get(0).getDrinkImageURL());
-        img.setImageBitmap(entries.get(0).getDrinkImage());
-
-    }
-
+    //TODO(1) modify favorite drinks dummy data insertion
     private void insertImageToDatabase() {
 
         InputStream inputStream = getResources().openRawResource(
                 getResources().getIdentifier("water",
                         "raw", getPackageName()));
         Bitmap myBitmap = BitmapFactory.decodeStream(inputStream);
-        DrinkEntry drinkEntry = new DrinkEntry("espresso", "http://google.com", myBitmap);
-
+        FavoriteDrinkEntry drinkEntry = new FavoriteDrinkEntry("espresso", "http://google.com", myBitmap, "coffee");
+        FavoriteDrinkEntry drinkEntry2 = new FavoriteDrinkEntry("espresso2", "http://google.com", myBitmap, "coffee");
+        FavoriteDrinkEntry drinkEntry3 = new FavoriteDrinkEntry("espresso3", "http://google.com", myBitmap, "coffee");
         mDb.drinkDao().insertDrink(drinkEntry);
+        mDb.drinkDao().insertDrink(drinkEntry2);
+        mDb.drinkDao().insertDrink(drinkEntry3);
+
     }
 
     @Override

@@ -1,30 +1,28 @@
 package theblueorb.dev.com.dependencyinjectionwithdagger2.database;
 
-import java.util.List;
-
-
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
-import theblueorb.dev.com.dependencyinjectionwithdagger2.Drink;
+
+import java.util.List;
 
 @Dao
-public interface DrinkDao {
+public interface FavoriteDrinkDao {
 
     @Insert
-    void insertDrink(DrinkEntry drink);
+    void insertDrink(FavoriteDrinkEntry drink);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateDrink(DrinkEntry drink);
+    void updateDrink(FavoriteDrinkEntry drink);
 
     @Delete
-    void deleteDrink(DrinkEntry drink);
+    void deleteDrink(FavoriteDrinkEntry drink);
 
     @Query("select * from drinks order by drinkName")
-    List<DrinkEntry> loadAllDrinks();
+    List<FavoriteDrinkEntry> loadAllDrinks();
 
     @Query("delete from drinks")
     void deleteTable();

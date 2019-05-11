@@ -1,4 +1,4 @@
-package theblueorb.dev.com.dependencyinjectionwithdagger2;
+package theblueorb.dev.com.dependencyinjectionwithdagger2.dagger;
 
 import javax.inject.Singleton;
 

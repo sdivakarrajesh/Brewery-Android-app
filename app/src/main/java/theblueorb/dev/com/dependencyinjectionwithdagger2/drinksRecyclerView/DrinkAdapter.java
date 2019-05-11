@@ -13,14 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
-import theblueorb.dev.com.dependencyinjectionwithdagger2.APIClient;
-import theblueorb.dev.com.dependencyinjectionwithdagger2.CoffeeActivity;
-import theblueorb.dev.com.dependencyinjectionwithdagger2.Drink;
 import theblueorb.dev.com.dependencyinjectionwithdagger2.R;
+import theblueorb.dev.com.dependencyinjectionwithdagger2.models.Drink;
 
 public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHolder> {
 
@@ -68,8 +64,8 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.DrinkViewHol
 
         public DrinkViewHolder(@NonNull View itemView) {
             super(itemView);
-            drinkImageView = (ImageView) itemView.findViewById(R.id.drink_image_rv);
-            drinkTextView = (TextView) itemView.findViewById(R.id.drink_name_rv);
+            drinkImageView = itemView.findViewById(R.id.drink_image_rv);
+            drinkTextView = itemView.findViewById(R.id.drink_name_rv);
         }
     }
 }

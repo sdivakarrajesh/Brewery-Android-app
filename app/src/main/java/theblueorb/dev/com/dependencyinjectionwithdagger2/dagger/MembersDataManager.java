@@ -1,8 +1,8 @@
-package theblueorb.dev.com.dependencyinjectionwithdagger2;
-
-import android.util.Log;
+package theblueorb.dev.com.dependencyinjectionwithdagger2.dagger;
 
 import java.util.ArrayList;
+
+import theblueorb.dev.com.dependencyinjectionwithdagger2.models.Member;
 
 public class MembersDataManager {
 

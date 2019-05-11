@@ -1,4 +1,4 @@
-package theblueorb.dev.com.dependencyinjectionwithdagger2;
+package theblueorb.dev.com.dependencyinjectionwithdagger2.network;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -11,6 +11,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import theblueorb.dev.com.dependencyinjectionwithdagger2.models.Drink;
+import theblueorb.dev.com.dependencyinjectionwithdagger2.onItemsFetchedFromNetworkListener;
 
 public class APIClient {
     public static final String BASE_URL = "https://starbucks-coffee-api.herokuapp.com/";
@@ -27,7 +29,7 @@ public class APIClient {
         return retrofit;
     }
 
-    public static void fetchCoffee(final Context context, final onItemsFetchedFromNetwork listener) {
+    public static void fetchCoffee(final Context context, final onItemsFetchedFromNetworkListener listener) {
 
         CoffeeAPIService coffeeAPIService = APIClient.getClient().create(CoffeeAPIService.class);
         Call<List<Drink>> call = coffeeAPIService.fetchDrinks("espresso");

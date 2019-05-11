@@ -2,19 +2,21 @@ package theblueorb.dev.com.dependencyinjectionwithdagger2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
 import javax.inject.Inject;
 
-import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import theblueorb.dev.com.dependencyinjectionwithdagger2.dagger.App;
+import theblueorb.dev.com.dependencyinjectionwithdagger2.dagger.MembersDataManager;
+import theblueorb.dev.com.dependencyinjectionwithdagger2.models.Member;
 
 public class MainActivity extends AppCompatActivity {
 

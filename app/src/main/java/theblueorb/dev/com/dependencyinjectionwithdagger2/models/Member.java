@@ -1,6 +1,4 @@
-package theblueorb.dev.com.dependencyinjectionwithdagger2;
-
-import androidx.annotation.Nullable;
+package theblueorb.dev.com.dependencyinjectionwithdagger2.models;
 
 public class Member {
     private String username;

@@ -5,28 +5,30 @@ import android.graphics.Bitmap;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
 
 @Entity(tableName = "drinks")
-public class DrinkEntry {
+public class FavoriteDrinkEntry {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String drinkName;
     private String drinkImageURL;
     private Bitmap drinkImage;
+    private String drinkType;
 
     @Ignore
-    public DrinkEntry(int id, String drinkName, String drinkImageURL, Bitmap drinkImage) {
+    public FavoriteDrinkEntry(int id, String drinkName, String drinkImageURL, Bitmap drinkImage, String drinkType) {
         this.id = id;
         this.drinkName = drinkName;
         this.drinkImageURL = drinkImageURL;
         this.drinkImage = drinkImage;
+        this.drinkType = drinkType;
     }
 
-    public DrinkEntry(String drinkName, String drinkImageURL, Bitmap drinkImage) {
+    public FavoriteDrinkEntry(String drinkName, String drinkImageURL, Bitmap drinkImage, String drinkType) {
         this.drinkName = drinkName;
         this.drinkImageURL = drinkImageURL;
         this.drinkImage = drinkImage;
+        this.drinkType = drinkType;
     }
 
     public int getId() {
@@ -59,6 +61,14 @@ public class DrinkEntry {
 
     public void setDrinkImage(Bitmap drinkImage) {
         this.drinkImage = drinkImage;
+    }
+
+    public String getDrinkType() {
+        return drinkType;
+    }
+
+    public void setDrinkType(String drinkType) {
+        this.drinkType = drinkType;
     }
 
 }

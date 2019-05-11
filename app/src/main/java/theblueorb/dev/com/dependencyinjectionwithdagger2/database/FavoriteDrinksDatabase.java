@@ -8,20 +8,20 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-@Database(entities = {DrinkEntry.class},version = 1,exportSchema = false)
+@Database(entities = {FavoriteDrinkEntry.class}, version = 1, exportSchema = false)
 @TypeConverters(ImageConvertor.class)
-public abstract class DrinkDatabase extends RoomDatabase {
+public abstract class FavoriteDrinksDatabase extends RoomDatabase {
 
-    private static final String TAG = DrinkDatabase.class.getSimpleName();
-    private static final String DATABASE_NAME = "drinks_db";
+    private static final String TAG = FavoriteDrinksDatabase.class.getSimpleName();
+    private static final String DATABASE_NAME = "favorite_drinks_db";
     private static final Object LOCK = new Object();
-    private static DrinkDatabase instance;
+    private static FavoriteDrinksDatabase instance;
 
-    public static DrinkDatabase getInstance(Context context){
+    public static FavoriteDrinksDatabase getInstance(Context context) {
         if (instance==null){
             synchronized (LOCK){
                 Log.e(TAG,"Creating new database");
-                instance = Room.databaseBuilder(context.getApplicationContext(), DrinkDatabase.class,DrinkDatabase.DATABASE_NAME )
+                instance = Room.databaseBuilder(context.getApplicationContext(), FavoriteDrinksDatabase.class, FavoriteDrinksDatabase.DATABASE_NAME)
                         .allowMainThreadQueries()
                         .build();
             }
@@ -31,5 +31,5 @@ public abstract class DrinkDatabase extends RoomDatabase {
 
     }
 
-    public abstract DrinkDao drinkDao();
+    public abstract FavoriteDrinkDao drinkDao();
 }
