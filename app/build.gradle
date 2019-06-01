@@ -1,11 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "theblueorb.dev.com.dependencyinjectionwithdagger2"
         minSdkVersion 17
         targetSdkVersion 28
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -29,15 +35,15 @@ dependencies {
     //dagger
     implementation 'com.google.dagger:dagger-android:2.20'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.20'
-    implementation 'com.google.android.material:material:1.1.0-alpha05'
+    implementation 'com.google.android.material:material:1.1.0-alpha07'
 
-    //butterkknife
-    implementation 'com.jakewharton:butterknife:9.0.0-rc1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
+    //butter knife
+    implementation 'com.jakewharton:butterknife:9.0.0-rc2'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc2'
 
     //retrofit and gson
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
-    implementation 'com.google.code.gson:gson:2.6.2'
+    implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
 
     //glide

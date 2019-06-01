@@ -29,10 +29,19 @@ public class APIClient {
         return retrofit;
     }
 
-    public static void fetchCoffee(final Context context, final onItemsFetchedFromNetworkListener listener) {
+    public static void fetchCoffee(final Context context, final onItemsFetchedFromNetworkListener listener, String drinkType, String drinkLimit) {
 
         CoffeeAPIService coffeeAPIService = APIClient.getClient().create(CoffeeAPIService.class);
-        Call<List<Drink>> call = coffeeAPIService.fetchDrinks("espresso");
+        Call<List<Drink>> call;
+        if (drinkType == null || drinkType.length() == 0) {
+            drinkType = "espresso";
+        }
+        if (drinkLimit.equals("") || drinkLimit.equals("No Limit")) {
+            call = coffeeAPIService.fetchDrinks(drinkType, 0);
+        } else {
+            call = coffeeAPIService.fetchDrinks(drinkType, Integer.parseInt(drinkLimit));
+        }
+
         call.enqueue(new Callback<List<Drink>>() {
             @Override
             public void onResponse(Call<List<Drink>> call, Response<List<Drink>> response) {

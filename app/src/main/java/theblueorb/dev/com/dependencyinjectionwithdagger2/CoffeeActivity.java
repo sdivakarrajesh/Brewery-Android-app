@@ -9,8 +9,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -31,6 +34,7 @@ import theblueorb.dev.com.dependencyinjectionwithdagger2.database.FavoriteDrinks
 import theblueorb.dev.com.dependencyinjectionwithdagger2.drinksRecyclerView.DrinkAdapter;
 import theblueorb.dev.com.dependencyinjectionwithdagger2.models.Drink;
 import theblueorb.dev.com.dependencyinjectionwithdagger2.network.APIClient;
+import theblueorb.dev.com.dependencyinjectionwithdagger2.utils.DrinksUtils;
 
 public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedFromNetworkListener {
 
@@ -40,6 +44,70 @@ public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedF
     @BindView(R.id.ll)
     LinearLayout ll;
     List<Drink> drinks;
+    @BindView(R.id.drink_type_spinner)
+    Spinner drinkTypeSpinner;
+    @BindView(R.id.limit_spinner)
+    Spinner limitSpinner;
+    @BindView(R.id.drinks_recycler_view)
+    RecyclerView recyclerView;
+
+    private FavoriteDrinksDatabase mDb;
+    private RecyclerView.LayoutManager layoutManager;
+    private DrinkAdapter drinkAdapter;
+    private String drinkType = "";
+    private String drinksLimit = "";
+    private static final String TAG = CoffeeActivity.class.getSimpleName();
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_coffee);
+        ButterKnife.bind(this);
+        mDb = FavoriteDrinksDatabase.getInstance(getApplicationContext());
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        final ArrayAdapter<String> drinksAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, DrinksUtils.drinkTypes);
+        drinkTypeSpinner.setAdapter(drinksAdapter);
+        ArrayAdapter<String> limitAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, DrinksUtils.limits);
+        limitSpinner.setAdapter(limitAdapter);
+        drinkTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                drinkType = drinkTypeSpinner.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        limitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                drinksLimit = limitSpinner.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    public void fetchAndLoadViews() {
+        APIClient.fetchCoffee(CoffeeActivity.this, this, drinkType, drinksLimit);
+    }
+
+    @OnClick({R.id.button})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.button: {
+                fetchAndLoadViews();
+                break;
+            }
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,40 +130,6 @@ public class CoffeeActivity extends AppCompatActivity implements onItemsFetchedF
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @BindView(R.id.drinks_recycler_view)
-    RecyclerView recyclerView;
-
-    private FavoriteDrinksDatabase mDb;
-    private RecyclerView.LayoutManager layoutManager;
-    private DrinkAdapter drinkAdapter;
-
-    private static final String TAG = CoffeeActivity.class.getSimpleName();
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_coffee);
-        ButterKnife.bind(this);
-        mDb = FavoriteDrinksDatabase.getInstance(getApplicationContext());
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-    }
-
-    public void fetchAndLoadViews() {
-        APIClient.fetchCoffee(CoffeeActivity.this, this);
-    }
-
-    @OnClick({R.id.button})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.button: {
-                fetchAndLoadViews();
-                break;
-            }
-        }
     }
 
     //TODO(1) modify favorite drinks dummy data insertion
